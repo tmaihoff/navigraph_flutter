@@ -1,0 +1,29 @@
+name: navigraph_flutter
+description: A new Flutter package project.
+version: 0.0.1
+homepage: null
+
+environment:
+  sdk: ">=2.18.5 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  freezed: ^2.3.2
+  path: ^1.8.2
+  sqflite: ^2.2.3
+  freezed_annotation: ^2.2.0
+  json_serializable: ^6.5.4
+
+dev_dependencies:
+  build_runner: ^2.3.3
+  flutter_lints: ^2.0.1
+  flutter_test:
+    sdk: flutter
+  sqflite_common_ffi: ^2.2.1
+  collection: ^1.16.0
+  
+flutter:
+  assets:
+    - assets/e_dfd_1903.db

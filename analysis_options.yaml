@@ -1,0 +1,16 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    invalid_annotation_target: false
+
+analyzer:
+  exclude:
+    - '**/generated_plugin_registrant.dart'
+    - '**/example/**.dart'
+    - '**/.vscode/**'
+    - '**/*.g.dart'
+    - '**/*.gr.dart'
+    - '**/*.freezed.dart'
+    - '**/assets/data/**'
+  
