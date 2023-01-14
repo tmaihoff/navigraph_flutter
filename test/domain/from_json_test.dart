@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:navigraph_flutter/navigraph_flutter.dart';
-import 'package:navigraph_flutter/table.dart';
+import 'package:navigraph_flutter/src/navigraph_flutter.dart';
+import 'package:navigraph_flutter/src/table.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../test_utils.dart';

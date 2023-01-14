@@ -1,38 +1,26 @@
-library navigraph_flutter;
-
-import 'dart:developer';
-import 'dart:io';
-
-import 'package:flutter/services.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
-
-class NavigraphFlutter {
-  NavigraphFlutter()
-      : assetPath = 'packages/navigraph_flutter/assets/e_dfd_1903.db';
-
-  final String assetPath;
-
-  Future<Database> openDb() async {
-    var databasesPath = await getDatabasesPath();
-    var path = join(databasesPath, 'always_load_db_from_asset.db');
-
-    await deleteDatabase(path);
-
-    try {
-      await Directory(dirname(path)).create(recursive: true);
-    } catch (_) {}
-
-    ByteData data = await rootBundle.load(assetPath);
-    log('db loaded from asset path $assetPath');
-
-    List<int> bytes =
-        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    await File(path).writeAsBytes(bytes, flush: true);
-
-    var db = await openDatabase(path, readOnly: true);
-    log('db created and opened');
-
-    return db;
-  }
-}
+export 'src/domain/airport.dart';
+export 'src/domain/airport_communication.dart';
+export 'src/domain/airport_msa.dart';
+export 'src/domain/controlled_airspace.dart';
+export 'src/domain/cruising_table.dart';
+export 'src/domain/enroute_airway.dart';
+export 'src/domain/enroute_airway_restriction.dart';
+export 'src/domain/enroute_communication.dart';
+export 'src/domain/enroute_ndbnavaid.dart';
+export 'src/domain/enroute_waypoint.dart';
+export 'src/domain/fir_uir.dart';
+export 'src/domain/gate.dart';
+export 'src/domain/gls.dart';
+export 'src/domain/grid_mora.dart';
+export 'src/domain/header.dart';
+export 'src/domain/holding.dart';
+export 'src/domain/localizer_glideslope.dart';
+export 'src/domain/localizer_marker.dart';
+export 'src/domain/restrictive_airspace.dart';
+export 'src/domain/runway.dart';
+export 'src/domain/terminal_ndbnavaid.dart';
+export 'src/domain/terminal_procedure.dart';
+export 'src/domain/terminal_waypoint.dart';
+export 'src/domain/vhfnavaid.dart';
+export 'src/navigraph_flutter.dart';
+export 'src/table.dart';
