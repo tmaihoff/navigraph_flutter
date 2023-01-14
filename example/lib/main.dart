@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:navigraph_flutter/navigraph_flutter.dart';
+import 'package:navigraph_flutter/navigraph_flutter.dart' as navigraph;
+import 'package:sqflite/sqflite.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,11 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Navigraph Flutter Example',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Navigraph Flutter DB Example'),
     );
   }
 }
@@ -30,40 +31,59 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // late Database db;
-  final int _counter = 0;
+  Database? db;
   @override
   void initState() {
     super.initState();
-    NavigraphFlutter().openDb();
+    openDb();
   }
 
-  Future<void> _incrementCounter() async {}
+  Future<void> openDb() async {
+    final openedDb = await navigraph.NavigraphFlutter().openDb();
+    setState(() => db = openedDb);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final tablesToDisplay = navigraph.Table.values.toList() //
+      ..remove(navigraph.Table.gls); // no GLS data in sample db
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: db == null
+            ? const CircularProgressIndicator()
+            : ListView.separated(
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: tablesToDisplay.length,
+                itemBuilder: (context, index) {
+                  final table = tablesToDisplay[index];
+                  return FutureBuilder<List<Map<String, Object?>>>(
+                    future: db!.query(table.name),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListTile(
+                          title: Text(
+                              'First entry of ${table.type} from table ${table.name}'),
+                          subtitle: Column(children: [
+                            Text(snapshot.data?.first.toString() ?? ''),
+                            const Divider(),
+                            Text(
+                              table.fromJson(snapshot.data!.first).toString(),
+                            ),
+                          ]),
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  );
+                },
+              ),
       ),
     );
   }
